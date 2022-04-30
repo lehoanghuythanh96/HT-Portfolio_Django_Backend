@@ -14,7 +14,6 @@ from rest_framework.views import APIView
 from MyPortfolioDjango import settings
 from blog.models import BlogMedia
 from blog.serializers import BlogMediaSerializer, BlogPostSerializer
-from users.models import User
 
 
 class uploadPostImg(APIView):

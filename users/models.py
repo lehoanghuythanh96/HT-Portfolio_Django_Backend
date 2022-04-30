@@ -48,7 +48,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True)
     email = models.EmailField(max_length=40, unique=True)
     full_name = models.CharField(max_length=50, blank=True)
-    user_role = models.CharField(max_length=50, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -56,7 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['full_name', 'user_role']
+    REQUIRED_FIELDS = ['full_name']
 
     def save(self, *args, **kwargs):
         super(User, self).save(*args, **kwargs)
