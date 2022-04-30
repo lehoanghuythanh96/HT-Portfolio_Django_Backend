@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from MyPortfolioDjango import settings
-from blog.models import BlogMedia
+from blog.models import BlogMedia, BlogPost
 from blog.serializers import BlogMediaSerializer, BlogPostSerializer
 from users.models import User
 
@@ -57,18 +57,22 @@ class uploadPostImg(APIView):
         serializer = self.serializer_class(newMedia)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+def deleteMediaInArray(media_items):
+    for item in media_items.iterator():
+        if item.media_path is not None:
+            realpath = f"{settings.MEDIA_ROOT}/{item.media_path}"
+            if os.path.isfile(realpath):
+                os.remove(realpath)
+            item.delete()
 
 
 class DeleteAllTrashMedia(APIView):
     def post(self, request):
         try:
             allTrashMedia = BlogMedia.objects.filter(media_status="trash")
-            for item in allTrashMedia.iterator():
-                if item.media_path is not None:
-                    realpath = f"{settings.MEDIA_ROOT}/{item.media_path}"
-                    if os.path.isfile(realpath):
-                        os.remove(realpath)
-                    item.delete()
+            deleteMediaInArray(allTrashMedia)
             return Response({"message": "All trash media successfully deleted"}, status=status.HTTP_200_OK)
         except BaseException as error:
             print(error)
@@ -98,3 +102,21 @@ class SaveSingleBlogPost(APIView):
                 item.save()
                 print(item.media_name)
         return Response({"message": "Post saved successfully"}, status=status.HTTP_201_CREATED)
+
+
+class deleteallblogpost(APIView):
+    def post(self, request):
+        try:
+            allPosts = BlogPost.objects.all()
+            for single in allPosts.iterator():
+                relatedMedias = BlogMedia.objects.filter(media_parent=single.id)
+                deleteMediaInArray(relatedMedias)
+                single.delete()
+        except BaseException as error:
+            print(error)
+            return Response({
+                "message": error
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({
+            "message": "Deleted succesfully"
+        }, status=status.HTTP_200_OK)
