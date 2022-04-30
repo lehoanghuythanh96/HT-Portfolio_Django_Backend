@@ -6,7 +6,7 @@ import uuid
 
 import magic
 from django.core.files.storage import FileSystemStorage
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,7 +14,6 @@ from rest_framework.views import APIView
 from MyPortfolioDjango import settings
 from blog.models import BlogMedia, BlogPost
 from blog.serializers import BlogMediaSerializer, BlogPostSerializer
-from users.models import User
 
 
 class uploadPostImg(APIView):
@@ -69,6 +68,9 @@ def deleteMediaInArray(media_items):
 
 
 class DeleteAllTrashMedia(APIView):
+
+    permission_classes = (permissions.IsAdminUser,)
+
     def post(self, request):
         try:
             allTrashMedia = BlogMedia.objects.filter(media_status="trash")
@@ -80,6 +82,9 @@ class DeleteAllTrashMedia(APIView):
 
 
 class SaveSingleBlogPost(APIView):
+
+    permission_classes = (permissions.IsAdminUser,)
+
     def post(self, request):
         postInfo = request.data["postInfo"]
         postInfo["id"] = uuid.uuid4()
@@ -105,6 +110,9 @@ class SaveSingleBlogPost(APIView):
 
 
 class deleteallblogpost(APIView):
+
+    permission_classes = (permissions.IsAdminUser,)
+
     def post(self, request):
         try:
             allPosts = BlogPost.objects.all()
