@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="386fab05-cf9e-4403-8c2a-aca9d06d29e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-    </list>
+    <list default="true" id="386fab05-cf9e-4403-8c2a-aca9d06d29e2" name="Default Changelist" comment="and env" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,8 +35,16 @@
       <option name="presentableId" value="Default" />
       <updated>1651306567073</updated>
       <workItem from="1651306568413" duration="477000" />
-      <workItem from="1651308002887" duration="62000" />
+      <workItem from="1651308002887" duration="82000" />
     </task>
+    <task id="LOCAL-00001" summary="and env">
+      <created>1651308074731</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1651308074731</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -55,5 +61,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="and env" />
+    <option name="LAST_COMMIT_MESSAGE" value="and env" />
   </component>
 </project>
