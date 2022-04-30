@@ -14,4 +14,4 @@ class PostType(DjangoObjectType):
     post_author = Field(UserType)
 
     def resolve_post_author(parent, info):
-        return User.objects.get(id=parent.post_author)
+        return User.objects.get(email=parent.post_author)
