@@ -42,7 +42,7 @@ class uploadPostImg(APIView):
                 return Response({"message": "This file type is not allowed!"}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
         
         newMedia = BlogMedia(
-            ID=uuid.uuid4(),
+            id=uuid.uuid4(),
             media_name=newName,
             media_author=request.user,
             media_path=f"{settings.POST_MEDIA_FOLDER}/{newName}",

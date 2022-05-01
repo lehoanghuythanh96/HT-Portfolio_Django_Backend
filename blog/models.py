@@ -1,4 +1,4 @@
-
+import uuid
 
 from django.db import models
 
@@ -19,12 +19,9 @@ class BlogPost(models.Model):
     post_category = models.CharField(max_length=55, null=False)
     post_status = models.CharField(max_length=55, null=False)
 
-    def __str__(self):
-        return self.name
-
 
 class BlogMedia(models.Model):
-    ID = models.UUIDField(primary_key=True)
+    id = models.UUIDField(primary_key=True)
     media_author = models.ForeignKey(
         User, on_delete=models.CASCADE, null=False)
     media_name = models.CharField(
@@ -35,3 +32,7 @@ class BlogMedia(models.Model):
     media_parent = models.ForeignKey(BlogPost, null=True, on_delete=models.CASCADE)
     media_date = models.DateTimeField(default=timezone.now)
     media_category = models.TextField(max_length=40, null=False)
+
+
+class AdminPanel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), )

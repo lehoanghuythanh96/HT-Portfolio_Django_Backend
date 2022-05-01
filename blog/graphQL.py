@@ -6,7 +6,7 @@ from users.graphQL import UserType
 from users.models import User
 
 
-class PostType(DjangoObjectType):
+class BlogPostType(DjangoObjectType):
     class Meta:
         model = BlogPost
         fields = "__all__"

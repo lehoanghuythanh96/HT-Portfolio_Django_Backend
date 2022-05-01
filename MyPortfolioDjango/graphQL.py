@@ -2,8 +2,14 @@ from http.cookies import SimpleCookie
 
 import jwt
 from django.contrib.auth import get_user_model
+import graphene
+from graphene_django import DjangoObjectType
+from rest_framework import status
+from rest_framework.response import Response
 
 from MyPortfolioDjango import settings
+from blog.graphQL import BlogPostType
+from blog.models import BlogPost, AdminPanel
 
 
 class CustomJSONWebTokenMiddleware:
@@ -18,6 +24,8 @@ class CustomJSONWebTokenMiddleware:
 
     def check_refresh_token(self, info):
         raw_cookie = info.context.headers.get('Cookie')
+        if raw_cookie is None:
+            return None
         cookie = SimpleCookie()
         cookie.load(raw_cookie)
         cookies = {}
@@ -46,3 +54,16 @@ def graph_ql_user_authenticated(func):
             raise Exception("You don't have permission to access this data")
         return func(self, info, **kwargs)
     return inner
+
+
+# Schemas
+class AdminPanelType(DjangoObjectType):
+
+    class Meta:
+        model = AdminPanel
+        fields = "__all__"
+
+    all_blog_posts = graphene.List(BlogPostType)
+
+    def resolve_all_blog_posts(parent, info):
+        return BlogPost.objects.all()
