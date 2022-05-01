@@ -4,8 +4,6 @@ import jwt
 from django.contrib.auth import get_user_model
 import graphene
 from graphene_django import DjangoObjectType
-from rest_framework import status
-from rest_framework.response import Response
 
 from MyPortfolioDjango import settings
 from blog.graphQL import BlogPostType
@@ -25,7 +23,7 @@ class CustomJSONWebTokenMiddleware:
     def check_refresh_token(self, info):
         raw_cookie = info.context.headers.get('Cookie')
         if raw_cookie is None:
-            return None
+            raise Exception("Please set up refresh_token cookie for graphql request")
         cookie = SimpleCookie()
         cookie.load(raw_cookie)
         cookies = {}
