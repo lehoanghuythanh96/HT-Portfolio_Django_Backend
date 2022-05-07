@@ -1,5 +1,3 @@
-
-
 # Create your views here.
 import os
 import uuid
@@ -17,7 +15,6 @@ from blog.serializers import BlogMediaSerializer, BlogPostSerializer
 
 
 class uploadPostImg(APIView):
-
     permission_classes = (IsAuthenticated,)
     serializer_class = BlogMediaSerializer
 
@@ -39,8 +36,9 @@ class uploadPostImg(APIView):
         if (file_type not in ['image/jpeg', 'image/png']):
             if os.path.isfile(media_path):
                 os.remove(media_path)
-                return Response({"message": "This file type is not allowed!"}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-        
+                return Response({"message": "This file type is not allowed!"},
+                                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
         newMedia = BlogMedia(
             id=uuid.uuid4(),
             media_name=newName,
@@ -56,7 +54,7 @@ class uploadPostImg(APIView):
         serializer = self.serializer_class(newMedia)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
 
 def deleteMediaInArray(media_items):
     for item in media_items.iterator():
@@ -68,7 +66,6 @@ def deleteMediaInArray(media_items):
 
 
 class DeleteAllTrashMedia(APIView):
-
     permission_classes = (permissions.IsAdminUser,)
 
     def post(self, request):
@@ -82,7 +79,6 @@ class DeleteAllTrashMedia(APIView):
 
 
 class SaveSingleBlogPost(APIView):
-
     permission_classes = (permissions.IsAdminUser,)
 
     def post(self, request):
@@ -110,7 +106,6 @@ class SaveSingleBlogPost(APIView):
 
 
 class deleteallblogpost(APIView):
-
     permission_classes = (permissions.IsAdminUser,)
 
     def post(self, request):
@@ -128,3 +123,28 @@ class deleteallblogpost(APIView):
         return Response({
             "message": "Deleted succesfully"
         }, status=status.HTTP_200_OK)
+
+
+class deleteblogpostby_ids(APIView):
+    permission_classes = (permissions.IsAdminUser,)
+
+    def post(self, request):
+        if isinstance(request.data, list) is False:
+            return Response(
+                {
+                    "message": "Please send an array of post ID"
+                }, status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            foundPosts = BlogPost.objects.filter(id__in=request.data)
+            for single in foundPosts.iterator():
+                relatedMedias = BlogMedia.objects.filter(media_parent=single.id)
+                deleteMediaInArray(relatedMedias)
+                single.delete()
+            return Response({
+                "message": "ok"
+            }, status=status.HTTP_200_OK)
+        except BaseException as error:
+            return Response({
+                "message": error
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
